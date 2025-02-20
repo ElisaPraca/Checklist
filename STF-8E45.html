@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STF-8E45</title>
+    <style>
+/* Estilizando o fundo da página */
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #eef2f7;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Centralizando e estilizando os containers */
+.container, .container1 {
+    width: 90%;
+    max-width: 800px;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+/* Melhorando os títulos */
+h1 {
+    text-align: center;
+    color: #333;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 25px;
+}
+
+/* Melhorando a organização dos campos do formulário */
+.form-group {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 90%;
+    margin-bottom: 20px;
+}
+
+/* Labels mais elegantes */
+label {
+    font-weight: bold;
+    color: #555;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+/* Inputs e selects com melhor aparência */
+select, input {
+    width: 90%;
+    padding: 12px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 15px;
+    background: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+/* Efeito ao focar nos campos */
+select:focus, input:focus {
+    border-color: #007bff;
+    outline: none;
+    box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Botão mais estilizado */
+button {
+    width: 50%;
+    padding: 14px;
+    background: linear-gradient(135deg, #28a745, #218838);
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 8px;
+    margin-top: 15px;
+    transition: all 0.3s ease-in-out;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+/* Efeito hover no botão */
+button:hover {
+    background: linear-gradient(135deg, #218838, #1e7e34);
+    transform: scale(1.02);
+}
+
+/* Responsividade */
+@media (max-width: 600px) {
+    .container, .container1 {
+        width: 95%;
+        padding: 20px;
+    }
+
+    select, input, button {
+        width: 100%;
+    }
+}
+
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Formulário de Checklist</h1>
+        <form id="checklistForm">
+            <div class="form-group">
+                <label for="data">Data:</label>
+                <input type="date" id="data" name="Data" required>
+            </div>
+
+            <div class="form-group">
+                <label for="nomeCliente">Nome do Cliente:</label>
+                <select id="nomeCliente" name="Nome do Cliente" required>
+                    <option value="Flavio Roberto Alves da Silva">Flavio Roberto Alves da Silva</option>
+                    <option value="Ricardo Nunes da Costa">Ricardo Nunes da Costa</option>
+                    <option value="Edson Pedro dos Santos">Edson Pedro dos Santos</option>
+                    <option value="Jefferson Ferreira da Silva">Jefferson Ferreira da Silva</option>
+                    <option value="Kaique Anderson Souza Silva">Kaique Anderson Souza Silva</option>
+                    <option value="Luis Felipe de Almeida Silva">Luis Felipe de Almeida Silva</option>
+                    <option value="Kazuaki Okada Junior">Kazuaki Okada Junior</option>
+                    <option value="Emerson Paulo do Espirito Santo">Emerson Paulo do Espirito Santo</option>
+                    <option value="Rogerio">Rogerio</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="combustivel">Nível de Combustível:</label>
+                <input type="text" id="combustivel" name="Nivel de Combustivel" required>
+            </div>
+
+            <div class="form-group">
+                <label for="km">Km:</label>
+                <input type="number" id="km" name="Km" required>
+            </div>
+
+            <h3>Itens de Verificação</h3>
+            <div id="checklistItems"></div>
+
+            <button type="submit">Enviar Checklist</button>
+        </form>
+
+        <div id="message"></div>
+    </div>
+
+
+    <div class="container1">
+        <h1>Enviar Imagens do carro</h1>
+        <form id="uploadForm">
+            <input type="file" id="imageFile" multiple>
+            <select id="folderSelect" disabled>
+                <option value="1IBI_-BSjF-vbVjZUXNRJyLqdHf01hio6">STF-8E45</option>
+                <!-- Adicione mais opções de pastas conforme necessário -->
+            </select>
+            <button type="submit">Enviar Imagens</button>
+        </form>
+        
+        <div id="message"></div>
+    </div>
+    </div>
+
+    <script>
+        // Lista de itens conforme a planilha
+        const checklistItems = [
+            "Antena", "GPS", "Carregador Celular", "Rádio", "Documentos", "Calotas", "Tapetes", "Manual",
+            "Estepe", "Pertences", "Instrumentos do painel e lâmpadas de controle", "Iluminação dos instrumentos do painel",
+            "Lâmpadas internas", "Setas de direção e luzes de sinalização", "Jato d'água dos limpadores de para-brisa",
+            "Ar-condicionado / ar-quente / ventilação", "Buzina", "Etiqueta de óleo", "Vidro elétrico",
+            "Freio de estacionamento", "Cinto de segurança e fixação", "Palhetas dos limpadores de para-brisa e vidro traseiro",
+            "Sistema de iluminação (Ex: faróis, setas, freio, placa, ré)", "Condições dos pneus / pressão (inclusive estepe)",
+            "Chave de roda, macaco e triângulo de segurança", "Líquido de arrefecimento (vazamento, nível, aditivo)",
+            "Fluido de freio: nível, qualidade (cor, contaminação)", "Nível do óleo do motor",
+            "Nível do óleo hidráulico (óleo de direção)", "Sistema de limpa-vidros / completar reservatório",
+            "Reservatório de partida a frio", "Vazamentos gerais", "Coxim motor", "Coxim câmbio inferior", "Com câmbio inferior", "Amortecedor dianteiro", "Batente dianteiro",
+            "Boletas", "Bandeja", "Pivô", "Braço da caixa", "Amortecedor traseiro", "Kit amortecedor traseiro",
+            "Lateral direita", "Lateral esquerda", "Farol direito", "Farol esquerda", "Milha esquerda", "Milha direita",
+            "Lanterna traseira direita", "Lanterna traseira esquerda", "Partilha disco de freio", "Trambo de freio traseiro",
+            "Lona de freio traseira", "Pára-choque dianteiro", "Pára-choque traseiro", "Cabo", "Tento", "Tampa do porta vala",
+            "Correia dentada"
+        ];
+
+        const checklistContainer = document.getElementById("checklistItems");
+
+// Criando os selects dinamicamente
+checklistItems.forEach(item => {
+    const div = document.createElement("div");
+    div.className = "form-group";
+
+    const label = document.createElement("label");
+    label.textContent = item;
+
+    const select = document.createElement("select");
+    select.name = item;
+
+    // Adicionando a opção vazia como primeira opção
+    const emptyOption = document.createElement("option");
+    emptyOption.value = "";
+    emptyOption.textContent = "Selecione...";
+    emptyOption.disabled = true;
+    emptyOption.selected = true;
+
+    select.appendChild(emptyOption);
+
+    // Adicionando as outras opções
+    const optionOk = document.createElement("option");
+    optionOk.value = "OK";
+    optionOk.textContent = "OK";
+
+    const optionNaoOk = document.createElement("option");
+    optionNaoOk.value = "Não OK";
+    optionNaoOk.textContent = "Não OK";
+
+    const optionNaoChecado = document.createElement("option");
+    optionNaoChecado.value = "Não Checado";
+    optionNaoChecado.textContent = "Não Checado";
+
+    // Adicionando as opções ao select
+    select.appendChild(optionOk);
+    select.appendChild(optionNaoOk);
+    select.appendChild(optionNaoChecado);
+
+    div.appendChild(label);
+    div.appendChild(select);
+    checklistContainer.appendChild(div);
+});
+
+document.getElementById("checklistForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evita o envio real do formulário
+
+    // Captura o título da página corretamente como nome do veículo
+    const nomeVeiculo = document.querySelector("title").innerText;
+
+    // Coletar os dados do formulário
+    const checklistData = {
+        "Data": document.getElementById("data").value,
+        "Nome do Cliente": document.getElementById("nomeCliente").value,
+        "Veículo ": nomeVeiculo, // Aqui agora vai automaticamente o nome do HTML
+        "Nivel de Combustivel": document.getElementById("combustivel").value,
+        "Km": document.getElementById("km").value
+    };
+
+    // Coletar os dados do checklist dinâmico
+    checklistItems.forEach(item => {
+        checklistData[item] = document.querySelector(`[name="${item}"]`).value;
+    });
+
+    // Enviar os dados para a API do SheetDB
+    fetch("https://sheetdb.io/api/v1/llqcpswuv52nn", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ data: checklistData })
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Resposta da API:", data);
+
+        if (data.created) {
+            document.getElementById("message").textContent = "Checklist enviado com sucesso!";
+            document.getElementById("message").style.color = "#28a745"; // Verde
+            document.getElementById("checklistForm").reset(); // Limpar formulário
+        } else {
+            document.getElementById("message").textContent = "Erro ao enviar o checklist.";
+            document.getElementById("message").style.color = "#ff6347"; // Vermelho
+        }
+    })
+    .catch(error => {
+        console.error("Erro ao enviar:", error);
+        document.getElementById("message").textContent = "Erro ao enviar o checklist.";
+        document.getElementById("message").style.color = "#ff6347"; // Vermelho
+    });
+});
+
+
+    </script>
+    <script src="script.js"></script>
+</body>
+</html>
