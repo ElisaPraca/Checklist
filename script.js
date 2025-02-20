@@ -16,7 +16,7 @@ document.getElementById('uploadForm').addEventListener('submit', function(event)
     }
 
     // Envia as imagens para a pasta selecionada
-    fetch(`http://localhost:5000/upload/${folderId}`, {  // URL dinâmica com o ID da pasta
+    fetch(`https://checklist-1-hstk.onrender.com/${folderId}`, {  // URL dinâmica com o ID da pasta
         method: 'POST',
         body: formData
     })
