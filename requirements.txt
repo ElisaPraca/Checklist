@@ -1,5 +1,5 @@
 Flask==2.0.2
-Flask-CORS==3.1.1
+Flask-CORS==2.1.2
 google-api-python-client==2.0.2
 google-auth==2.3.3
 google-auth-oauthlib==0.4.6
