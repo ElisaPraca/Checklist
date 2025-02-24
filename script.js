@@ -1,50 +1,41 @@
-document.getElementById('uploadForm').addEventListener('submit', function(event) {
-    event.preventDefault();
+document.getElementById("uploadForm").addEventListener("submit", async function(event) {
+    event.preventDefault(); // Evita o recarregamento da página
 
-    const formData = new FormData();
-    const files = document.getElementById('imageFile').files;
-    const folderId = document.getElementById('folderSelect').value; // Obtém o ID da pasta
+    const fileInput = document.getElementById("imageFile");
+    const folderId = document.getElementById("folderSelect").value;
+    const messageDiv = document.getElementById("message");
 
-    if (files.length === 0) {
-        document.getElementById('message').innerHTML = "Por favor, selecione pelo menos uma imagem!";
+    if (!fileInput.files.length) {
+        messageDiv.innerText = "Selecione pelo menos um arquivo!";
+        messageDiv.style.color = "red";
         return;
     }
 
-    // Adiciona todas as imagens ao FormData
-    for (let i = 0; i < files.length; i++) {
-        formData.append('files', files[i]); // Mantendo a chave 'files' se o backend espera assim
+    let formData = new FormData();
+    for (let file of fileInput.files) {
+        formData.append("files", file);
     }
 
-    // Faz a requisição para o backend
-    fetch(`https://checklist-3.onrender.com/upload/${folderId}`, {
-        method: 'POST',
-        body: formData,
-        headers: {
-            'Accept': 'application/json'
-        }
-    })
-    .then(response => {
-        // Verifique o conteúdo bruto da resposta antes de parsear
-        return response.text();  // Usamos .text() para obter o conteúdo bruto
-    })
-    .then(data => {
-        console.log('Resposta bruta:', data);  // Verifique o conteúdo aqui
-        try {
-            const jsonResponse = JSON.parse(data);  // Tente parsear manualmente
-            console.log('Resposta JSON:', jsonResponse);
-            if (jsonResponse.message) {
-                document.getElementById('message').innerHTML = "Imagens enviadas com sucesso!";
-            } else {
-                document.getElementById('message').innerHTML = jsonResponse.error || "Erro desconhecido!";
-            }
-        } catch (error) {
-            console.error('Erro ao parsear JSON:', error);
-            document.getElementById('message').innerHTML = "Erro na resposta do servidor!";
-        }
-    })
-    .catch(error => {
-        console.error('Erro:', error);
-        document.getElementById('message').innerHTML = "Erro ao enviar as imagens!";
-    });
+    messageDiv.innerText = "Enviando...";
+    messageDiv.style.color = "blue";
 
-})
+    try {
+        const response = await fetch(`https://checklist-dwvs.onrender.com/upload/${folderId}`, {
+            method: "POST",
+            body: formData
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+            messageDiv.innerText = `Upload realizado! Arquivos enviados com sucesso.`;
+            messageDiv.style.color = "green";
+        } else {
+            messageDiv.innerText = `Erro: ${result.error}`;
+            messageDiv.style.color = "red";
+        }
+    } catch (error) {
+        messageDiv.innerText = `Erro ao conectar com o servidor!`;
+        messageDiv.style.color = "red";
+    }
+});
