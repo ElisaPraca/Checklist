@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SSX-5B37</title>
     <style>
-/* Estilizando o fundo da página */
+
 body {
     font-family: 'Arial', sans-serif;
     margin: 0;
@@ -18,7 +18,7 @@ body {
     min-height: 100vh;
 }
 
-/* Centralizando e estilizando os containers */
+
 .container, .container1 {
     width: 90%;
     max-width: 800px;
@@ -29,7 +29,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Melhorando os títulos */
+
 h1 {
     text-align: center;
     color: #333;
@@ -38,7 +38,7 @@ h1 {
     margin-bottom: 25px;
 }
 
-/* Melhorando a organização dos campos do formulário */
+
 .form-group {
     display: flex;
     flex-direction: column;
@@ -47,7 +47,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-/* Labels mais elegantes */
+
 label {
     font-weight: bold;
     color: #555;
@@ -55,7 +55,7 @@ label {
     margin-bottom: 5px;
 }
 
-/* Inputs e selects com melhor aparência */
+
 select, input {
     width: 90%;
     padding: 12px;
@@ -66,14 +66,14 @@ select, input {
     transition: 0.3s ease-in-out;
 }
 
-/* Efeito ao focar nos campos */
+
 select:focus, input:focus {
     border-color: #007bff;
     outline: none;
     box-shadow: 0px 0px 8px rgba(0, 123, 255, 0.3);
 }
 
-/* Botão mais estilizado */
+
 button {
     width: 50%;
     padding: 14px;
@@ -89,13 +89,13 @@ button {
     text-transform: uppercase;
 }
 
-/* Efeito hover no botão */
+
 button:hover {
     background: linear-gradient(135deg, #218838, #1e7e34);
     transform: scale(1.02);
 }
 
-/* Responsividade */
+
 @media (max-width: 600px) {
     .container, .container1 {
         width: 95%;
@@ -160,7 +160,7 @@ button:hover {
             <input type="file" id="imageFile" multiple>
             <select id="folderSelect" disabled>
                 <option value="160JFWanKMPkeApxoVnm8oLa8R4_E3HUv">SSX-5B37</option>
-                <!-- Adicione mais opções de pastas conforme necessário -->
+            
             </select>
             <button type="submit">Enviar Imagens</button>
         </form>
@@ -190,7 +190,7 @@ button:hover {
 
         const checklistContainer = document.getElementById("checklistItems");
 
-// Criando os selects dinamicamente
+
 checklistItems.forEach(item => {
     const div = document.createElement("div");
     div.className = "form-group";
@@ -201,7 +201,7 @@ checklistItems.forEach(item => {
     const select = document.createElement("select");
     select.name = item;
 
-    // Adicionando a opção vazia como primeira opção
+  
     const emptyOption = document.createElement("option");
     emptyOption.value = "";
     emptyOption.textContent = "Selecione...";
@@ -210,7 +210,7 @@ checklistItems.forEach(item => {
 
     select.appendChild(emptyOption);
 
-    // Adicionando as outras opções
+   
     const optionOk = document.createElement("option");
     optionOk.value = "OK";
     optionOk.textContent = "OK";
@@ -223,7 +223,7 @@ checklistItems.forEach(item => {
     optionNaoChecado.value = "Não Checado";
     optionNaoChecado.textContent = "Não Checado";
 
-    // Adicionando as opções ao select
+  
     select.appendChild(optionOk);
     select.appendChild(optionNaoOk);
     select.appendChild(optionNaoChecado);
@@ -234,26 +234,26 @@ checklistItems.forEach(item => {
 });
 
 document.getElementById("checklistForm").addEventListener("submit", function(event) {
-    event.preventDefault(); // Evita o envio real do formulário
-
-    // Captura o título da página corretamente como nome do veículo
+    event.preventDefault();
+    
+   
     const nomeVeiculo = document.querySelector("title").innerText;
 
-    // Coletar os dados do formulário
+
     const checklistData = {
         "Data": document.getElementById("data").value,
         "Nome do Cliente": document.getElementById("nomeCliente").value,
-        "Veículo ": nomeVeiculo, // Aqui agora vai automaticamente o nome do HTML
+        "Veículo ": nomeVeiculo, 
         "Nivel de Combustivel": document.getElementById("combustivel").value,
         "Km": document.getElementById("km").value
     };
 
-    // Coletar os dados do checklist dinâmico
+    
     checklistItems.forEach(item => {
         checklistData[item] = document.querySelector(`[name="${item}"]`).value;
     });
 
-    // Enviar os dados para a API do SheetDB
+   
     fetch("https://sheetdb.io/api/v1/llqcpswuv52nn", {
         method: "POST",
         headers: {
@@ -267,17 +267,17 @@ document.getElementById("checklistForm").addEventListener("submit", function(eve
 
         if (data.created) {
             document.getElementById("message").textContent = "Checklist enviado com sucesso!";
-            document.getElementById("message").style.color = "#28a745"; // Verde
-            document.getElementById("checklistForm").reset(); // Limpar formulário
+            document.getElementById("message").style.color = "#28a745"; 
+            document.getElementById("checklistForm").reset(); 
         } else {
             document.getElementById("message").textContent = "Erro ao enviar o checklist.";
-            document.getElementById("message").style.color = "#ff6347"; // Vermelho
+            document.getElementById("message").style.color = "#ff6347";
         }
     })
     .catch(error => {
         console.error("Erro ao enviar:", error);
         document.getElementById("message").textContent = "Erro ao enviar o checklist.";
-        document.getElementById("message").style.color = "#ff6347"; // Vermelho
+        document.getElementById("message").style.color = "#ff6347"; 
     });
 });
 
