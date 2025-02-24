@@ -18,7 +18,7 @@ def get_drive_service():
     creds_json = os.getenv("GOOGLE_CREDENTIALS_JSON")
     if not creds_json:
         raise ValueError("A variável GOOGLE_CREDENTIALS_JSON não está configurada!")
-
+    
     creds_dict = json.loads(creds_json)  # Transformando JSON em dicionário
     creds = service_account.Credentials.from_service_account_info(creds_dict, scopes=SCOPES)
     return build('drive', 'v3', credentials=creds)
@@ -43,12 +43,14 @@ def upload_files_to_folder(folder_id):
         media = MediaIoBaseUpload(file_buffer, mimetype=file.content_type, resumable=True)
         
         try:
+            # Fazendo o upload do arquivo para o Google Drive
             file_drive = drive_service.files().create(body=file_metadata, media_body=media, fields='id').execute()
             uploaded_files.append({'filename': filename, 'file_id': file_drive.get('id')})
         except Exception as e:
+            # Retorna o erro caso o upload falhe
             return jsonify({'error': f'Erro ao enviar {filename}: {str(e)}'}), 500
     
     return jsonify({'message': 'Upload realizado com sucesso', 'files': uploaded_files})
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=8080)
+    app.run(host='0.0.0.0', port=int(os.getenv('PORT', 8080)))  # Usa a variável PORT ou 8080
