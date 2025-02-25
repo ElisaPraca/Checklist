@@ -166,6 +166,11 @@ button:hover {
             <h3>Itens de Verificação</h3>
             <div id="checklistItems"></div>
 
+            <div class="form-group">
+                <label for="observacao">Observação:</label>
+                <textarea id="observacao" name="observacao" placeholder="Digite sua observação..."></textarea>
+            </div>
+
             <button type="submit">Enviar Checklist</button>
         </form>
 
@@ -266,6 +271,7 @@ document.getElementById("checklistForm").addEventListener("submit", function(eve
         "Veículo ": nomeVeiculo, 
         "Nivel de Combustivel": document.getElementById("combustivel").value,
         "Km": document.getElementById("km").value
+        "Observacao": document.getElementById("observacao").value
     };
 
   
